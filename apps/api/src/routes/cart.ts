@@ -48,12 +48,12 @@ router.put("/", validate(UpdateCartSchema), async (req, res) => {
     .in("id", productIds)
     .eq("status", "active");
 
-  const productMap = new Map((products || []).map((p) => [p.id, p]));
+  const productMap = new Map((products || []).map((p: any) => [p.id, p]));
 
   const cartItems = wanted
     .filter((i) => productMap.has(i.productId))
     .map((i) => {
-      const p = productMap.get(i.productId)!;
+      const p = productMap.get(i.productId) as any;
       return {
         productId: p.id,
         _id: p.id, // For compatibility

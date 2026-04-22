@@ -54,7 +54,7 @@ router.get("/", async (req, res) => {
   }
 
   const total = count || 0;
-  const itemsWithId = (items || []).map(i => ({ ...i, _id: i.id }));
+  const itemsWithId = (items || []).map((i: any) => ({ ...i, _id: i.id }));
 
   res.json({
     success: true,

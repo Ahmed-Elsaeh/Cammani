@@ -147,7 +147,7 @@ router.get("/products", requireRole("seller", "admin"), async (req, res) => {
     .eq("seller_id", seller.id)
     .order("created_at", { ascending: false });
 
-  const productsWithId = (products || []).map(p => ({ ...p, _id: p.id }));
+  const productsWithId = (products || []).map((p: any) => ({ ...p, _id: p.id }));
   res.json({ success: true, data: productsWithId });
 });
 
@@ -257,7 +257,7 @@ router.get("/orders", requireRole("seller", "admin"), async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
     return;
   }
-  const ordersWithId = (orders || []).map(o => ({ ...o, _id: o.id }));
+  const ordersWithId = (orders || []).map((o: any) => ({ ...o, _id: o.id }));
   res.json({ success: true, data: ordersWithId });
 });
 

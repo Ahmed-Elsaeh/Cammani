@@ -17,7 +17,7 @@ router.get("/me", async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
     return;
   }
-  const ordersWithId = (orders || []).map(o => ({ ...o, _id: o.id }));
+  const ordersWithId = (orders || []).map((o: any) => ({ ...o, _id: o.id }));
   res.json({ success: true, data: ordersWithId });
 });
 
