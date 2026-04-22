@@ -1,10 +1,11 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
-import { User } from "../models/User";
+import { supabase } from "../lib/supabase";
 import { validate } from "../middleware/validate";
 import { authenticate } from "../middleware/auth";
 import { config } from "../config";
 import { RegisterSchema, LoginSchema } from "@cammani/shared";
+import bcrypt from "bcryptjs";
 
 const router = Router();
 
@@ -22,19 +23,38 @@ function signTokens(userId: string, roles: string[]) {
 router.post("/register", validate(RegisterSchema), async (req, res) => {
   const { email, password, name, role } = req.body;
 
-  const existing = await User.findOne({ email });
+  const { data: existing } = await supabase
+    .from("users")
+    .select("id")
+    .eq("email", email.toLowerCase())
+    .single();
+
   if (existing) {
     res.status(409).json({ success: false, error: "Email already registered" });
     return;
   }
 
-  const user = new User({ email, name, passwordHash: password, roles: [role] });
-  await user.save();
+  const passwordHash = await bcrypt.hash(password, 12);
+  const { data: user, error } = await supabase
+    .from("users")
+    .insert({
+      email: email.toLowerCase(),
+      name,
+      password_hash: passwordHash,
+      roles: [role],
+    })
+    .select()
+    .single();
 
-  const { accessToken, refreshToken } = signTokens(user._id.toString(), user.roles);
+  if (error || !user) {
+    res.status(500).json({ success: false, error: "Error creating user" });
+    return;
+  }
+
+  const { accessToken, refreshToken } = signTokens(user.id, user.roles);
   res.status(201).json({
     success: true,
-    data: { accessToken, refreshToken, user: { _id: user._id, email, name, roles: user.roles } },
+    data: { accessToken, refreshToken, user: { _id: user.id, email, name, roles: user.roles } },
   });
 });
 
@@ -42,16 +62,21 @@ router.post("/register", validate(RegisterSchema), async (req, res) => {
 router.post("/login", validate(LoginSchema), async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
-  if (!user || !(await user.comparePassword(password))) {
+  const { data: user, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("email", email.toLowerCase())
+    .single();
+
+  if (error || !user || !(await bcrypt.compare(password, user.password_hash))) {
     res.status(401).json({ success: false, error: "Invalid credentials" });
     return;
   }
 
-  const { accessToken, refreshToken } = signTokens(user._id.toString(), user.roles);
+  const { accessToken, refreshToken } = signTokens(user.id, user.roles);
   res.json({
     success: true,
-    data: { accessToken, refreshToken, user: { _id: user._id, email: user.email, name: user.name, roles: user.roles } },
+    data: { accessToken, refreshToken, user: { _id: user.id, email: user.email, name: user.name, roles: user.roles } },
   });
 });
 
@@ -71,16 +96,24 @@ router.post("/refresh", async (req, res) => {
   }
 });
 
-// POST /auth/logout (client just discards tokens; endpoint for future blocklist)
+// POST /auth/logout
 router.post("/logout", authenticate, (_req, res) => {
   res.json({ success: true, message: "Logged out" });
 });
 
 // GET /auth/me
 router.get("/me", authenticate, async (req, res) => {
-  const user = await User.findById(req.user!.userId).select("-passwordHash");
-  if (!user) { res.status(404).json({ success: false, error: "User not found" }); return; }
-  res.json({ success: true, data: user });
+  const { data: user, error } = await supabase
+    .from("users")
+    .select("id, email, name, roles, created_at, updated_at")
+    .eq("id", req.user!.userId)
+    .single();
+
+  if (error || !user) {
+    res.status(404).json({ success: false, error: "User not found" });
+    return;
+  }
+  res.json({ success: true, data: { ...user, _id: user.id } });
 });
 
 export default router;

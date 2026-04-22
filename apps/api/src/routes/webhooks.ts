@@ -1,16 +1,13 @@
 import { Router, Request, Response } from "express";
 import Stripe from "stripe";
 import { config } from "../config";
-import { Order } from "../models/Order";
-import { OrderEvent } from "../models/OrderEvent";
-import { Cart } from "../models/Cart";
-import { StripeAccount } from "../models/StripeAccount";
+import { supabase } from "../lib/supabase";
 
 const router = Router();
 
 const stripe = new Stripe(config.stripe.secretKey, { apiVersion: "2024-06-20" });
 
-// POST /webhooks/stripe — raw body required (set up in app.ts before JSON middleware)
+// POST /webhooks/stripe
 router.post("/stripe", async (req: Request, res: Response) => {
   const sig = req.headers["stripe-signature"] as string;
 
@@ -25,7 +22,12 @@ router.post("/stripe", async (req: Request, res: Response) => {
   }
 
   // Idempotency: skip already-processed events
-  const existing = await OrderEvent.findOne({ stripeEventId: event.id });
+  const { data: existing } = await supabase
+    .from("order_events")
+    .select("id")
+    .eq("data->>id", event.id) // Assuming event.id is stored in the data jsonb
+    .single();
+
   if (existing) {
     res.json({ received: true });
     return;
@@ -37,47 +39,55 @@ router.post("/stripe", async (req: Request, res: Response) => {
         const session = event.data.object as Stripe.Checkout.Session;
         const orderId = session.metadata?.orderId;
         if (orderId) {
-          await Order.findByIdAndUpdate(orderId, {
-            status: "paid",
-            stripePaymentIntentId: session.payment_intent as string,
-          });
+          await supabase
+            .from("orders")
+            .update({
+              status: "paid",
+              stripe_payment_intent_id: session.payment_intent as string,
+            })
+            .eq("id", orderId);
+            
           // Clear the buyer's cart
           const userId = session.metadata?.userId;
-          if (userId) await Cart.findOneAndUpdate({ userId }, { $set: { items: [] } });
+          if (userId) {
+            await supabase
+              .from("carts")
+              .update({ items: [] })
+              .eq("user_id", userId);
+          }
         }
         break;
       }
 
       case "payment_intent.succeeded": {
         const pi = event.data.object as Stripe.PaymentIntent;
-        await Order.findOneAndUpdate(
-          { stripePaymentIntentId: pi.id },
-          { status: "paid" }
-        );
+        await supabase
+          .from("orders")
+          .update({ status: "paid" })
+          .eq("stripe_payment_intent_id", pi.id);
         break;
       }
 
       case "payment_intent.payment_failed": {
         const pi = event.data.object as Stripe.PaymentIntent;
-        await Order.findOneAndUpdate(
-          { stripePaymentIntentId: pi.id },
-          { status: "failed" }
-        );
+        await supabase
+          .from("orders")
+          .update({ status: "failed" })
+          .eq("stripe_payment_intent_id", pi.id);
         console.log(`Payment failed for PI: ${pi.id}`);
         break;
       }
 
       case "account.updated": {
-        // Stripe Connect account status update
         const account = event.data.object as Stripe.Account;
-        await StripeAccount.findOneAndUpdate(
-          { connectAccountId: account.id },
-          {
-            chargesEnabled: account.charges_enabled,
-            payoutsEnabled: account.payouts_enabled,
-            onboardingStatus: account.details_submitted ? "complete" : "pending",
-          }
-        );
+        await supabase
+          .from("stripe_accounts")
+          .update({
+            charges_enabled: account.charges_enabled,
+            payouts_enabled: account.payouts_enabled,
+            details_submitted: account.details_submitted,
+          })
+          .eq("stripe_id", account.id);
         break;
       }
 
@@ -86,10 +96,9 @@ router.post("/stripe", async (req: Request, res: Response) => {
     }
 
     // Persist audit trail
-    await OrderEvent.create({
-      stripeEventId: event.id,
+    await supabase.from("order_events").insert({
       type: event.type,
-      payload: event.data.object as unknown as Record<string, unknown>,
+      data: event.data.object as any,
     });
 
     res.json({ received: true });

@@ -17,4 +17,8 @@ export const config = {
     webhookSecret: process.env.STRIPE_WEBHOOK_SECRET || "",
   },
   frontendUrl: process.env.FRONTEND_URL || "http://localhost:3000",
+  supabase: {
+    url: process.env.SUPABASE_URL || "",
+    anonKey: process.env.SUPABASE_ANON_KEY || "",
+  },
 };

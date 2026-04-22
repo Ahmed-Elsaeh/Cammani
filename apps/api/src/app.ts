@@ -14,7 +14,7 @@ import checkoutRoutes from "./routes/checkout";
 import orderRoutes from "./routes/orders";
 import webhookRoutes from "./routes/webhooks";
 import { errorHandler } from "./middleware/errorHandler";
-import { Category } from "./models/Category";
+import { supabase } from "./lib/supabase";
 
 export function createApp() {
   const app = express();
@@ -38,8 +38,11 @@ export function createApp() {
   app.use("/auth", authLimiter, authRoutes);
   app.use("/products", catalogRoutes);
   app.use("/categories", async (_req, res) => {
-    const cats = await Category.find().sort({ order: 1 }).lean();
-    res.json({ success: true, data: cats });
+    const { data: cats } = await supabase
+      .from("categories")
+      .select("*")
+      .order("order", { ascending: true });
+    res.json({ success: true, data: cats || [] });
   });
   app.use("/seller", sellerRoutes);
   app.use("/cart", cartRoutes);
