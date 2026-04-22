@@ -1,0 +1,54 @@
+.empty {
+  text-align: center;
+  padding: 80px 24px;
+  background: white;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+.emptyIcon { margin-bottom: 16px; color: var(--gray-300); }
+
+.list { display: flex; flex-direction: column; gap: 24px; }
+
+.orderHeader {
+  background: var(--bg-tertiary);
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  align-items: flex-start;
+}
+.headerCol { display: flex; flex-direction: column; gap: 4px; }
+.headerLabel { font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+.headerValue { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+.headerRight { margin-left: auto; text-align: right; display: flex; flex-direction: column; gap: 4px; }
+
+.status-pending { color: var(--amber-500); }
+.status-paid { color: var(--green-500); }
+.status-processing { color: var(--blue-500); }
+.status-shipped { color: var(--blue-600); }
+.status-delivered { color: var(--green-500); }
+
+.items { padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+.item { display: flex; gap: 16px; }
+@media (max-width: 640px) { .item { flex-direction: column; } }
+
+.itemImgWrap {
+  width: 90px;
+  height: 90px;
+  position: relative;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.itemImg { object-fit: contain; padding: 8px; }
+
+.itemInfo { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.itemTitle { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+.itemTitle:hover { color: var(--brand); text-decoration: underline; }
+.itemMeta { font-size: 13px; color: var(--text-secondary); }
+
+.itemActions { flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }

@@ -1,0 +1,214 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(135deg, var(--blue-800) 0%, var(--blue-700) 100%);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.25);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: var(--header-height);
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+.logoIcon {
+  width: 32px;
+  height: 32px;
+  background: var(--amber-400);
+  color: var(--blue-900);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+.logoText {
+  font-size: 22px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.04em;
+}
+
+/* Search */
+.searchForm {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  max-width: 680px;
+  background: white;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+  transition: box-shadow var(--transition);
+}
+.searchForm:focus-within { box-shadow: 0 0 0 3px var(--amber-400), 0 2px 8px rgb(0 0 0 / 0.15); }
+
+.searchInput {
+  flex: 1;
+  height: 40px;
+  padding: 0 16px;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  background: transparent;
+}
+.searchInput::placeholder { color: var(--gray-400); }
+
+.searchBtn {
+  width: 44px;
+  height: 40px;
+  background: var(--amber-400);
+  color: var(--blue-900);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition);
+  flex-shrink: 0;
+}
+.searchBtn:hover { background: var(--amber-500); }
+
+/* Actions */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.iconBtn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: background var(--transition);
+}
+.iconBtn:hover { background: rgb(255 255 255 / 0.15); }
+
+.badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: var(--amber-400);
+  color: var(--blue-900);
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Account menu */
+.accountMenu { position: relative; }
+.accountBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: var(--radius-md);
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background var(--transition);
+  cursor: pointer;
+}
+.accountBtn:hover { background: rgb(255 255 255 / 0.15); }
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  background: var(--amber-400);
+  color: var(--blue-900);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.accountName { max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 200px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  padding: 6px;
+  animation: slideDown 0.15s ease;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  color: var(--text-primary);
+  transition: background var(--transition);
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+.dropdownItem:hover { background: var(--blue-50); color: var(--brand); }
+
+.dropdownDivider { height: 1px; background: var(--border); margin: 4px 0; }
+
+.signInBtn { color: white; border-color: rgb(255 255 255 / 0.5); }
+.signInBtn:hover { background: rgb(255 255 255 / 0.1) !important; }
+
+/* Mobile */
+.mobileMenuBtn {
+  display: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  transition: background var(--transition);
+}
+.mobileMenuBtn:hover { background: rgb(255 255 255 / 0.15); }
+
+.mobileSearch {
+  display: none;
+  padding: 0 16px 12px;
+  background: inherit;
+}
+.mobileSearch .searchForm { max-width: 100%; }
+
+@media (max-width: 768px) {
+  .searchForm { display: none; }
+  .mobileSearch { display: flex; align-items: center; background: linear-gradient(135deg, var(--blue-800), var(--blue-700)); gap: 0; }
+  .mobileSearch .searchInput { background: white; }
+  .accountName { display: none; }
+  .mobileMenuBtn { display: flex; }
+}

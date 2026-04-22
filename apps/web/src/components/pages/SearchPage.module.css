@@ -1,0 +1,84 @@
+.topRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.heading { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+.count { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+
+.controls { display: flex; align-items: center; gap: 10px; }
+.filterToggle { display: none; }
+@media (max-width: 768px) { .filterToggle { display: flex; } }
+
+.sortWrap { position: relative; display: flex; align-items: center; }
+.sortSelect {
+  width: auto;
+  padding-right: 32px;
+  appearance: none;
+  cursor: pointer;
+  height: 36px;
+  font-size: 13px;
+}
+.sortChevron {
+  position: absolute;
+  right: 10px;
+  pointer-events: none;
+  color: var(--text-muted);
+}
+
+.layout { display: flex; gap: 24px; align-items: flex-start; }
+
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  position: sticky;
+  top: calc(var(--header-height) + var(--nav-height) + 16px);
+}
+@media (max-width: 768px) {
+  .sidebar { display: none; width: 100%; position: static; }
+  .sidebarOpen { display: block; }
+}
+
+.filterGroup { display: flex; flex-direction: column; gap: 12px; }
+.filterTitle { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.priceRow { display: flex; align-items: center; gap: 8px; }
+.priceRow .input { height: 34px; font-size: 13px; }
+
+.results { flex: 1; min-width: 0; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 14px;
+}
+@media (min-width: 1100px) { .grid { grid-template-columns: repeat(4, 1fr); } }
+
+.skeletonCard { background: white; border-radius: var(--radius-lg); border: 1px solid var(--border); overflow: hidden; }
+.skeletonImg { height: 180px; border-radius: 0; }
+
+.empty {
+  text-align: center;
+  padding: 80px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-secondary);
+}
+.empty h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+}
+.pageInfo { font-size: 13px; color: var(--text-secondary); }

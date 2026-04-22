@@ -1,0 +1,30 @@
+{
+  "name": "@cammani/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@cammani/shared": "*",
+    "next": "^14.2.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "axios": "^1.7.2",
+    "zustand": "^4.5.4",
+    "react-hot-toast": "^2.4.1",
+    "lucide-react": "^0.395.0",
+    "@stripe/stripe-js": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.2",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.4.5",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.4"
+  }
+}
