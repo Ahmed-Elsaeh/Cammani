@@ -8,7 +8,7 @@ import { StripeAccount } from "../models/StripeAccount";
 
 const router = Router();
 
-const stripe = new Stripe(config.stripe.secretKey, { apiVersion: "2025-03-31.basil" });
+const stripe = new Stripe(config.stripe.secretKey, { apiVersion: "2024-06-20" });
 
 // POST /webhooks/stripe — raw body required (set up in app.ts before JSON middleware)
 router.post("/stripe", async (req: Request, res: Response) => {
@@ -57,6 +57,16 @@ router.post("/stripe", async (req: Request, res: Response) => {
         break;
       }
 
+      case "payment_intent.payment_failed": {
+        const pi = event.data.object as Stripe.PaymentIntent;
+        await Order.findOneAndUpdate(
+          { stripePaymentIntentId: pi.id },
+          { status: "failed" }
+        );
+        console.log(`Payment failed for PI: ${pi.id}`);
+        break;
+      }
+
       case "account.updated": {
         // Stripe Connect account status update
         const account = event.data.object as Stripe.Account;
@@ -79,7 +89,7 @@ router.post("/stripe", async (req: Request, res: Response) => {
     await OrderEvent.create({
       stripeEventId: event.id,
       type: event.type,
-      payload: event.data.object as Record<string, unknown>,
+      payload: event.data.object as unknown as Record<string, unknown>,
     });
 
     res.json({ received: true });

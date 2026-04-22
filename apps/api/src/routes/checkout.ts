@@ -7,7 +7,7 @@ import Stripe from "stripe";
 
 const router = Router();
 
-const stripe = new Stripe(config.stripe.secretKey, { apiVersion: "2025-03-31.basil" });
+const stripe = new Stripe(config.stripe.secretKey, { apiVersion: "2024-06-20" });
 
 // POST /checkout/session
 router.post("/session", authenticate, async (req: Request, res: Response) => {

@@ -14,7 +14,7 @@ export interface IOrder extends Document {
   items: IOrderItem[];
   subtotal: number;
   total: number;
-  status: "pending" | "paid" | "processing" | "shipped" | "delivered" | "cancelled" | "refunded";
+  status: "pending" | "paid" | "processing" | "shipped" | "delivered" | "cancelled" | "refunded" | "failed";
   stripeCheckoutSessionId?: string;
   stripePaymentIntentId?: string;
   createdAt: Date;
@@ -41,7 +41,7 @@ const OrderSchema = new Schema<IOrder>(
     total: { type: Number, required: true },
     status: {
       type: String,
-      enum: ["pending", "paid", "processing", "shipped", "delivered", "cancelled", "refunded"],
+      enum: ["pending", "paid", "processing", "shipped", "delivered", "cancelled", "refunded", "failed"],
       default: "pending",
     },
     stripeCheckoutSessionId: { type: String },

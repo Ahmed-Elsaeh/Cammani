@@ -11,7 +11,8 @@
     "dev:web": "npm run dev -w apps/web",
     "dev:api": "npm run dev -w apps/api",
     "build": "npm run build --workspaces --if-present",
-    "lint": "npm run lint --workspaces --if-present"
+    "lint": "npm run lint --workspaces --if-present",
+    "stripe:listen": "stripe listen --forward-to localhost:4000/webhooks/stripe"
   },
   "engines": {
     "node": ">=18.0.0",
