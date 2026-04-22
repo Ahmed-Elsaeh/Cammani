@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
     if (maxPrice) filter.price.$lte = parseFloat(maxPrice);
   }
 
-  const sortMap: Record<string, object> = {
+  const sortMap: Record<string, any> = {
     price_asc: { price: 1 },
     price_desc: { price: -1 },
     rating: { rating: -1 },
