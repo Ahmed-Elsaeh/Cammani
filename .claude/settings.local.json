@@ -4,7 +4,13 @@
       "mcp__plugin_vercel_vercel__deploy_to_vercel",
       "mcp__plugin_vercel_vercel__list_teams",
       "Bash(npm i *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(vercel link *)",
+      "Bash(vercel)",
+      "Bash(vercel logs *)",
+      "Bash(npm install *)",
+      "Bash(vercel --prod)",
+      "Bash(npm pkg *)"
     ]
   }
 }

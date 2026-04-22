@@ -9,22 +9,22 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@cammani/shared": "*",
+    "@cammani/shared": "workspace:*",
+    "@stripe/stripe-js": "^4.1.0",
+    "axios": "^1.7.2",
+    "lucide-react": "^0.395.0",
     "next": "^14.2.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "axios": "^1.7.2",
-    "zustand": "^4.5.4",
     "react-hot-toast": "^2.4.1",
-    "lucide-react": "^0.395.0",
-    "@stripe/stripe-js": "^4.1.0"
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@types/node": "^20.14.2",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "typescript": "^5.4.5",
     "eslint": "^8.57.0",
-    "eslint-config-next": "^14.2.4"
+    "eslint-config-next": "^14.2.4",
+    "typescript": "^5.4.5"
   }
 }
