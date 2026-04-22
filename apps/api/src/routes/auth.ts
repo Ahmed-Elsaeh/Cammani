@@ -23,11 +23,17 @@ function signTokens(userId: string, roles: string[]) {
 router.post("/register", validate(RegisterSchema), async (req, res) => {
   const { email, password, name, role } = req.body;
 
-  const { data: existing } = await supabase
+  const { data: existing, error: checkError } = await supabase
     .from("users")
     .select("id")
     .eq("email", email.toLowerCase())
-    .single();
+    .maybeSingle();
+
+  if (checkError) {
+    console.error("Supabase error checking existing user:", checkError);
+    res.status(500).json({ success: false, error: "Database error during registration check", details: checkError.message });
+    return;
+  }
 
   if (existing) {
     res.status(409).json({ success: false, error: "Email already registered" });
@@ -35,7 +41,7 @@ router.post("/register", validate(RegisterSchema), async (req, res) => {
   }
 
   const passwordHash = await bcrypt.hash(password, 12);
-  const { data: user, error } = await supabase
+  const { data: user, error: insertError } = await supabase
     .from("users")
     .insert({
       email: email.toLowerCase(),
@@ -46,14 +52,19 @@ router.post("/register", validate(RegisterSchema), async (req, res) => {
     .select()
     .single();
 
-  if (error) {
-    console.error("Supabase error creating user:", error);
-    res.status(500).json({ success: false, error: "Error creating user", details: error.message });
+  if (insertError) {
+    console.error("Supabase error creating user:", insertError);
+    res.status(500).json({ 
+      success: false, 
+      error: "Error creating user record", 
+      details: insertError.message,
+      code: insertError.code 
+    });
     return;
   }
 
   if (!user) {
-    res.status(500).json({ success: false, error: "User not created" });
+    res.status(500).json({ success: false, error: "User record was not returned after creation" });
     return;
   }
 
