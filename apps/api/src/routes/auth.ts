@@ -46,8 +46,14 @@ router.post("/register", validate(RegisterSchema), async (req, res) => {
     .select()
     .single();
 
-  if (error || !user) {
-    res.status(500).json({ success: false, error: "Error creating user" });
+  if (error) {
+    console.error("Supabase error creating user:", error);
+    res.status(500).json({ success: false, error: "Error creating user", details: error.message });
+    return;
+  }
+
+  if (!user) {
+    res.status(500).json({ success: false, error: "User not created" });
     return;
   }
 
