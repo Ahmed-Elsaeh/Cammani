@@ -18,8 +18,9 @@ export default function RegisterPage() {
       await register(name, email, password);
       toast.success("Account created!");
       router.push("/");
-    } catch {
-      toast.error("Could not create account. Email may be taken.");
+    } catch (err: any) {
+      const msg = err.response?.data?.error || "Could not create account. Please try again.";
+      toast.error(msg);
     }
   }
 
