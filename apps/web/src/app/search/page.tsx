@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import SearchPage from "@/components/pages/SearchPage";
 
 export const metadata: Metadata = {
@@ -6,4 +7,10 @@ export const metadata: Metadata = {
   description: "Browse and filter millions of products on Cammani.",
 };
 
-export default function Page() { return <SearchPage />; }
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="page-content container">Searching...</div>}>
+      <SearchPage />
+    </Suspense>
+  );
+}
