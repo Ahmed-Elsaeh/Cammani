@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@cammani/shared": "workspace:*",
+    "@cammani/shared": "*",
     "@stripe/stripe-js": "^4.1.0",
     "axios": "^1.7.2",
     "lucide-react": "^0.395.0",
