@@ -1,11 +1,14 @@
 import { createClient } from "@supabase/supabase-js";
 import { config } from "../config";
 
-if (!config.supabase.url || !config.supabase.anonKey) {
-  console.warn("⚠️ Supabase credentials missing in config");
+const supabaseUrl = config.supabase.url;
+const supabaseAnonKey = config.supabase.anonKey;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error("❌ CRITICAL: Supabase credentials missing in environment variables!");
 }
 
-export const supabase = createClient(
-  config.supabase.url,
-  config.supabase.anonKey
-);
+// We only initialize if we have the credentials to prevent the 'supabaseUrl is required' crash
+export const supabase = (supabaseUrl && supabaseAnonKey) 
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : (null as any); // Type cast as any to avoid breaking imports elsewhere
