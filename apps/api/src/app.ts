@@ -28,6 +28,12 @@ export function createApp() {
   app.use(express.json());
   app.use(morgan("dev"));
 
+  // ── Debug Logging
+  app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+  });
+
   // ── Rate limiting for auth
   const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
