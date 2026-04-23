@@ -12,6 +12,7 @@ import sellerRoutes from "./routes/seller";
 import cartRoutes from "./routes/cart";
 import checkoutRoutes from "./routes/checkout";
 import orderRoutes from "./routes/orders";
+import adminRoutes from "./routes/admin";
 import webhookRoutes from "./routes/webhooks";
 import { errorHandler } from "./middleware/errorHandler";
 import { supabase } from "./lib/supabase";
@@ -48,6 +49,7 @@ export function createApp() {
   app.use("/cart", cartRoutes);
   app.use("/checkout", checkoutRoutes);
   app.use("/orders", orderRoutes);
+  app.use("/admin", adminRoutes);
   app.use("/webhooks", webhookRoutes);
 
   // ── Health check
