@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import api from "@/lib/api";
-import type { CartItemDto } from "@cammani/shared";
+import type { CartItemDto } from "@/types/shared";
 
 interface CartState {
   items: CartItemDto[];

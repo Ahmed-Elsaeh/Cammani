@@ -5,7 +5,7 @@ import { Plus, Edit2 } from "lucide-react";
 import api from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
 import toast from "react-hot-toast";
-import type { ProductDto } from "@cammani/shared";
+import type { ProductDto } from "@/types/shared";
 
 export default function SellerProducts() {
   const { user } = useAuthStore();

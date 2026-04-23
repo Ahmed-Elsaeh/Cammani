@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@cammani/shared": "*",
     "@stripe/stripe-js": "^4.1.0",
     "axios": "^1.7.2",
     "framer-motion": "^12.38.0",

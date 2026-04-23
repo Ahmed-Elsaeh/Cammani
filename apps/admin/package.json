@@ -8,7 +8,6 @@
     "start": "next start"
   },
   "dependencies": {
-    "@cammani/shared": "^0.1.0",
     "axios": "^1.15.2",
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.395.0",

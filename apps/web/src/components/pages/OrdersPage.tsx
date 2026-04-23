@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { PackageOpen, CheckCircle } from "lucide-react";
 import api from "@/lib/api";
-import type { OrderDto } from "@cammani/shared";
+import type { OrderDto } from "@/types/shared";
 import toast from "react-hot-toast";
 import styles from "./OrdersPage.module.css";
 

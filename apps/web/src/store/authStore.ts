@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import api from "@/lib/api";
-import type { UserDto } from "@cammani/shared";
+import type { UserDto } from "@/types/shared";
 
 interface AuthState {
   user: UserDto | null;

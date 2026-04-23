@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authenticate } from "../middleware/auth";
 import { validate } from "../middleware/validate";
 import { supabase } from "../lib/supabase";
-import { UpdateCartSchema } from "@cammani/shared";
+import { UpdateCartSchema } from "../types/shared";
 
 const router = Router();
 router.use(authenticate);

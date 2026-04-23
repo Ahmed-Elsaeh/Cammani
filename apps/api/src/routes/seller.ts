@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authenticate, requireRole } from "../middleware/auth";
 import { validate } from "../middleware/validate";
 import { supabase } from "../lib/supabase";
-import { SellerApplySchema, CreateProductSchema } from "@cammani/shared";
+import { SellerApplySchema, CreateProductSchema } from "../types/shared";
 import Stripe from "stripe";
 import { config } from "../config";
 

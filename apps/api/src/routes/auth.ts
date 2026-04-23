@@ -4,7 +4,7 @@ import { supabase } from "../lib/supabase";
 import { validate } from "../middleware/validate";
 import { authenticate } from "../middleware/auth";
 import { config } from "../config";
-import { RegisterSchema, LoginSchema } from "@cammani/shared";
+import { RegisterSchema, LoginSchema } from "../types/shared";
 import bcrypt from "bcryptjs";
 
 const router = Router();
