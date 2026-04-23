@@ -21,6 +21,11 @@ function signTokens(userId: string, roles: string[]) {
 
 // POST /auth/register
 router.post("/register", validate(RegisterSchema), async (req, res) => {
+  if (!supabase) {
+    res.status(500).json({ success: false, error: "Database configuration missing", details: "SUPABASE_URL or SUPABASE_ANON_KEY not set" });
+    return;
+  }
+
   const { email, password, name, role } = req.body;
 
   const { data: existing, error: checkError } = await supabase
@@ -68,7 +73,7 @@ router.post("/register", validate(RegisterSchema), async (req, res) => {
     return;
   }
 
-  const { accessToken, refreshToken } = signTokens(user.id, user.roles);
+  const { accessToken, refreshToken } = signTokens(user.id, user.roles || ["buyer"]);
   res.status(201).json({
     success: true,
     data: { accessToken, refreshToken, user: { _id: user.id, email, name, roles: user.roles } },

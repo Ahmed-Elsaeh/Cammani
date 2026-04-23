@@ -19,8 +19,10 @@ export default function RegisterPage() {
       toast.success("Account created!");
       router.push("/");
     } catch (err: any) {
-      const msg = err.response?.data?.error || "Could not create account. Please try again.";
-      toast.error(msg);
+      console.error("Registration error:", err);
+      const msg = err.response?.data?.error || err.message || "Could not create account. Please try again.";
+      const details = err.response?.data?.details ? `: ${err.response.data.details}` : "";
+      toast.error(`${msg}${details}`);
     }
   }
 
