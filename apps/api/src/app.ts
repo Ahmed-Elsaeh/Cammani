@@ -36,22 +36,17 @@ export function createApp() {
       }
 
       // Allow the configured frontend URL
-      if (origin === config.frontendUrl) {
+      if (origin === config.frontendUrl || origin === 'https://cammani-web.vercel.app') {
         return callback(null, true);
       }
 
-      // Allow all Vercel preview deployments for this project
-      if (origin.endsWith('.seee7aaa-projects.vercel.app')) {
-        return callback(null, true);
-      }
-
-      // Allow the main Vercel domain for this project
-      if (origin === 'cammani-api.vercel.app') {
+      // Allow all Vercel subdomains for this project
+      if (origin.endsWith('.vercel.app')) {
         return callback(null, true);
       }
 
       // Reject other origins
-      return callback(new Error('Not allowed by CORS'));
+      return callback(null, false);
     },
     credentials: true
   };
