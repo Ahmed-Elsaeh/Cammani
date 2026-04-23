@@ -10,8 +10,11 @@ export function errorHandler(
   console.error(err);
   
   // Ensure CORS headers are present even in error responses
-  res.header("Access-Control-Allow-Origin", _req.headers.origin || "*");
-  res.header("Access-Control-Allow-Credentials", "true");
+  const origin = _req.headers.origin;
+  if (origin) {
+    res.header("Access-Control-Allow-Origin", origin);
+    res.header("Access-Control-Allow-Credentials", "true");
+  }
   
   res.status(500).json({ 
     success: false, 

@@ -24,16 +24,26 @@ export function createApp() {
   app.use("/webhooks", express.raw({ type: "application/json" }));
 
   // ── Global middleware
-  // ── Permissive CORS (Unblocks development/deployment)
   app.use(cors({
-    origin: true, // Reflects the request origin
+    origin: true,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
   }));
   
-  // Explicitly handle preflight for all routes
   app.options("*", cors());
+
+  // ── Database Safety Check
+  app.use((req, res, next) => {
+    if (!supabase) {
+      return res.status(500).json({ 
+        success: false, 
+        error: "Database configuration missing", 
+        details: "Please set SUPABASE_URL and SUPABASE_ANON_KEY in your environment variables." 
+      });
+    }
+    next();
+  });
 
   app.use(express.json());
   app.use(morgan("dev"));
