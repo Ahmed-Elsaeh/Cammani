@@ -24,7 +24,39 @@ export function createApp() {
   app.use("/webhooks", express.raw({ type: "application/json" }));
 
   // ── Global middleware
-  app.use(cors({ origin: config.frontendUrl, credentials: true }));
+  // Allow requests from frontend URL and all Vercel preview deployments
+  const corsOptions = {
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      // Allow localhost for development
+      if (origin.startsWith('http://localhost:') || origin.startsWith('https://localhost:')) {
+        return callback(null, true);
+      }
+
+      // Allow the configured frontend URL
+      if (origin === config.frontendUrl) {
+        return callback(null, true);
+      }
+
+      // Allow all Vercel preview deployments for this project
+      if (origin.endsWith('.seee7aaa-projects.vercel.app')) {
+        return callback(null, true);
+      }
+
+      // Allow the main Vercel domain for this project
+      if (origin === 'cammani-api.vercel.app') {
+        return callback(null, true);
+      }
+
+      // Reject other origins
+      return callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true
+  };
+
+  app.use(cors(corsOptions));
   app.use(express.json());
   app.use(morgan("dev"));
 

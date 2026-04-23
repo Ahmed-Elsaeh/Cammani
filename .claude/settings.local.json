@@ -10,7 +10,15 @@
       "Bash(vercel logs *)",
       "Bash(npm install *)",
       "Bash(vercel --prod)",
-      "Bash(npm pkg *)"
+      "Bash(npm pkg *)",
+      "mcp__plugin_vercel_vercel__list_projects",
+      "mcp__plugin_vercel_vercel__get_project",
+      "Bash(vercel env *)",
+      "Bash(vercel ls *)",
+      "mcp__plugin_vercel_vercel__list_deployments",
+      "mcp__plugin_vercel_vercel__get_deployment",
+      "Bash(vercel *)",
+      "Bash(npm run *)"
     ]
   }
 }
