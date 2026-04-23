@@ -20,7 +20,28 @@ router.get("/", async (req, res) => {
     query = query.or(`title.ilike.%${q}%,description.ilike.%${q}%`);
   }
   if (category) {
-    query = query.eq("category_id", category);
+    // If it looks like a UUID, use category_id, otherwise search by category slug
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(category);
+    if (isUuid) {
+      query = query.eq("category_id", category);
+    } else {
+      // We need to join with categories table to filter by slug
+      // However, Supabase doesn't support easy filtering on joined tables in a simple .eq() 
+      // without using specialized syntax or RPC.
+      // Another way is to first find the category ID by slug.
+      const { data: catData } = await supabase
+        .from("categories")
+        .select("id")
+        .eq("slug", category)
+        .single();
+      
+      if (catData) {
+        query = query.eq("category_id", catData.id);
+      } else {
+        // If category not found by slug, maybe it's an old-style ID (number)
+        query = query.eq("category_id", category);
+      }
+    }
   }
   if (minPrice) {
     query = query.gte("price", parseFloat(minPrice));

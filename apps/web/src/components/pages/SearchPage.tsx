@@ -61,7 +61,17 @@ export default function SearchPage() {
       <div className={styles.topRow}>
         <div>
           <h1 className={styles.heading}>
-            {q ? `Results for "${q}"` : category ? `Category: ${category}` : "All Products"}
+            {q ? (
+              `Results for "${q}"`
+            ) : category ? (
+              `Category: ${category
+                .split('-')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ')
+                .replace('And', '&')}`
+            ) : (
+              "All Products"
+            )}
           </h1>
           {!loading && <p className={styles.count}>{meta.total.toLocaleString()} results</p>}
         </div>

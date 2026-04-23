@@ -34,8 +34,8 @@ export default function NavBar() {
         </Link>
         {categories.slice(0, 8).map((cat) => (
           <Link
-            key={cat._id}
-            href={`/search?category=${cat._id}`}
+            key={cat._id || cat.slug}
+            href={`/search?category=${cat.slug}`}
             className={styles.item}
           >
             {cat.name}

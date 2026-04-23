@@ -43,7 +43,9 @@ export function createApp() {
       .from("categories")
       .select("*")
       .order("order", { ascending: true });
-    res.json({ success: true, data: cats || [] });
+    
+    const mapped = (cats || []).map((c: any) => ({ ...c, _id: c.id }));
+    res.json({ success: true, data: mapped });
   });
   app.use("/seller", sellerRoutes);
   app.use("/cart", cartRoutes);
