@@ -9,7 +9,7 @@
     "lint": "eslint src --ext .ts"
   },
   "dependencies": {
-    "@cammani/shared": "*",
+    "@cammani/shared": "file:../../packages/shared",
     "@supabase/supabase-js": "^2.104.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
