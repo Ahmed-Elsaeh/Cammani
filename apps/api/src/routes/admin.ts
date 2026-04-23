@@ -2,10 +2,37 @@ import { Router } from "express";
 import { authenticate, requireRole } from "../middleware/auth";
 import { supabase } from "../lib/supabase";
 import { z } from "zod";
+import jwt from "jsonwebtoken";
+import { config } from "../config";
 
 const router = Router();
 
-// All routes here require admin role
+// ── Admin Login ───────────────────────────────────────────────────────────────
+
+router.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  // For this specific setup, we'll check the hardcoded credentials
+  if (username === "seee7aaa" && password === "TouchMate159_") {
+    const token = jwt.sign(
+      { userId: "admin-system", roles: ["admin"] },
+      config.jwt.secret,
+      { expiresIn: "7d" }
+    );
+
+    return res.json({ 
+      success: true, 
+      data: { 
+        token, 
+        user: { name: "System Admin", roles: ["admin"] } 
+      } 
+    });
+  }
+
+  res.status(401).json({ success: false, error: "Invalid credentials" });
+});
+
+// All routes below require admin role
 router.use(authenticate, requireRole("admin"));
 
 // ── Sellers Management ─────────────────────────────────────────────────────────

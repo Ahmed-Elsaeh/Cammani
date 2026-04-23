@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { 
   LayoutDashboard, 
   Users, 
@@ -8,9 +9,10 @@ import {
   Layers, 
   Settings, 
   LogOut,
-  ChevronRight
+  ChevronRight,
+  Loader2
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_ITEMS = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
@@ -21,6 +23,35 @@ const NAV_ITEMS = [
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("admin_token") || localStorage.getItem("accessToken");
+    if (!token && pathname !== "/login") {
+      router.push("/login");
+    } else {
+      setIsReady(true);
+    }
+  }, [pathname, router]);
+
+  function handleLogout() {
+    localStorage.removeItem("admin_token");
+    localStorage.removeItem("accessToken");
+    router.push("/login");
+  }
+
+  if (!isReady && pathname !== "/login") {
+    return (
+      <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f172a' }}>
+        <Loader2 className="animate-spin" style={{ color: 'var(--primary)' }} size={40} />
+      </div>
+    );
+  }
+
+  if (pathname === "/login") {
+    return <>{children}</>;
+  }
 
   return (
     <div className="layout">
@@ -72,7 +103,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         <div style={{ padding: '24px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-          <button className="btn btn-ghost" style={{ width: '100%', justifyContent: 'flex-start', color: 'rgba(255,255,255,0.7)' }}>
+          <button 
+            onClick={handleLogout}
+            className="btn btn-ghost" 
+            style={{ width: '100%', justifyContent: 'flex-start', color: 'rgba(255,255,255,0.7)' }}
+          >
             <LogOut size={20} />
             <span>Logout</span>
           </button>
