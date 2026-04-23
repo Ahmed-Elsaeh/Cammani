@@ -21,7 +21,7 @@
         "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
         "Access-Control-Allow-Credentials": "true"
       },
-      "dest": "/api/index.ts"
+      "dest": "/apps/api/api/index.ts"
     }
   ]
 }
